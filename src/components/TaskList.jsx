@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import TaskCard from './TaskCard';
+import { useAuth } from "../context/AuthContext";
 import { getTasks, saveTasks } from '../services/storageService';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,9 +13,13 @@ const TaskList = ({ tasks, setTasks }) => {
   });
   const [editingTask, setEditingTask] = useState(null);
 
+  const { user } = useAuth();
+
   useEffect(() => {
-    setTasks(getTasks());
-  }, []);
+    if (user) {
+      setTasks(getTasks(user));
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +34,7 @@ const TaskList = ({ tasks, setTasks }) => {
         task.id === editingTask.id ? { ...editingTask, ...form } : task
       );
       setTasks(updatedTasks);
-      saveTasks(updatedTasks);
+      saveTasks(user, updatedTasks);
       setEditingTask(null);
     } else {
       const newTask = {
@@ -39,7 +44,7 @@ const TaskList = ({ tasks, setTasks }) => {
       };
       const updated = [...tasks, newTask];
       setTasks(updated);
-      saveTasks(updated);
+      saveTasks(user, updated);
     }
 
     setForm({ title: "", category: "", priority: "Média", dueDate: "" });
@@ -50,13 +55,13 @@ const TaskList = ({ tasks, setTasks }) => {
       task.id === id ? { ...task, completed: !task.completed } : task
     );
     setTasks(updated);
-    saveTasks(updated);
+    saveTasks(user, updated);
   };
 
   const handleDelete = (id) => {
     const updated = tasks.filter((task) => task.id !== id);
     setTasks(updated);
-    saveTasks(updated);
+    saveTasks(user, updated);
   };
 
   const handleEdit = (task) => {

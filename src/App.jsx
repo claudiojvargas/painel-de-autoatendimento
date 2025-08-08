@@ -1,43 +1,41 @@
-import { useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import { getUser, getTasks, getHabits } from './services/storageService';
+import { useAuth } from "./context/AuthContext";
+import { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import { getTasks, getHabits } from "./services/storageService";
 
 function App() {
-  const user = getUser();
+  const { user } = useAuth();
 
-  // 🔼 Estados globais
+  // Estados globais para tasks e habits
   const [tasks, setTasks] = useState([]);
   const [habits, setHabits] = useState([]);
 
-  // Carregar do localStorage ao iniciar
+  // Carregar dados do localStorage no primeiro render, baseado no usuário logado
   useEffect(() => {
-    setTasks(getTasks());
-    setHabits(getHabits());
-  }, []);
+    if (user) {
+      setTasks(getTasks(user));
+      setHabits(getHabits(user));
+    }
+  }, [user]);
+
+  if (!user) return <Login />;
 
   return (
     <Routes>
       <Route
-        path="/"
-        element={user ? <Navigate to="/home" /> : <Login />}
-      />
-      <Route
         path="/home"
         element={
-          user ? (
-            <Home
-              tasks={tasks}
-              setTasks={setTasks}
-              habits={habits}
-              setHabits={setHabits}
-            />
-          ) : (
-            <Navigate to="/" />
-          )
+          <Home
+            tasks={tasks}
+            setTasks={setTasks}
+            habits={habits}
+            setHabits={setHabits}
+          />
         }
       />
+      <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   );
 }

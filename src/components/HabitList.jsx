@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from "../context/AuthContext";
 import { getHabits, saveHabits } from '../services/storageService';
 import { v4 as uuidv4 } from 'uuid';
 import HabitCard from './HabitCard';
@@ -7,9 +8,13 @@ import { format } from 'date-fns';
 const HabitList = ({ habits, setHabits }) => {
   const [form, setForm] = useState({ name: '', frequency: 'diário' });
 
+  const { user } = useAuth();
+
   useEffect(() => {
-    setHabits(getHabits());
-  }, [setHabits]);
+    if (user) {
+      setHabits(getHabits(user));
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +33,7 @@ const HabitList = ({ habits, setHabits }) => {
 
     const updated = [...habits, newHabit];
     setHabits(updated);
-    saveHabits(updated);
+    saveHabits(user, updated);
 
     setForm({ name: '', frequency: 'diário' });
   };

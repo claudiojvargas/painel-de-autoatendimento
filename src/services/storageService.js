@@ -1,7 +1,5 @@
-// Chave padrão para o nome do usuário
+// Chave padrão para armazenar o nome do usuário logado
 const USER_KEY = 'user';
-const TASKS_KEY = 'tasks';
-const HABITS_KEY = 'habits';
 
 // Usuário
 export const saveUser = (name) => {
@@ -16,22 +14,20 @@ export const clearUser = () => {
   localStorage.removeItem(USER_KEY);
 };
 
-// Tarefas
-export const saveTasks = (tasks) => {
-  localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+// 🔹 Funções de Tarefas
+export const getTasks = (username) => {
+  return JSON.parse(localStorage.getItem(`tasks_${username}`)) || [];
 };
 
-export const getTasks = () => {
-  const tasks = localStorage.getItem(TASKS_KEY);
-  return tasks ? JSON.parse(tasks) : [];
+export const saveTasks = (username, tasks) => {
+  localStorage.setItem(`tasks_${username}`, JSON.stringify(tasks));
 };
 
-// Hábitos
-export const saveHabits = (habits) => {
-  localStorage.setItem(HABITS_KEY, JSON.stringify(habits));
+// 🔹 Funções de Hábitos
+export const getHabits = (username) => {
+  return JSON.parse(localStorage.getItem(`habits_${username}`)) || [];
 };
 
-export const getHabits = () => {
-  const habits = localStorage.getItem(HABITS_KEY);
-  return habits ? JSON.parse(habits) : [];
+export const saveHabits = (username, habits) => {
+  localStorage.setItem(`habits_${username}`, JSON.stringify(habits));
 };

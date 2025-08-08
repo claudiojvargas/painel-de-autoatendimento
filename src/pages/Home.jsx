@@ -2,13 +2,14 @@ import TaskList from '../components/TaskList';
 import HabitList from '../components/HabitList';
 import Dashboard from '../components/Dashboard';
 import { getUser } from '../services/storageService';
+import Header from '../components/Header';
 
 const Home = ({ tasks, setTasks, habits, setHabits }) => {
   const name = getUser();
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 space-y-8">
-      <h1 className="text-2xl font-bold text-gray-800">Olá, {name}!</h1>
+      <Header />
 
       <Dashboard tasks={tasks} habits={habits} />
 

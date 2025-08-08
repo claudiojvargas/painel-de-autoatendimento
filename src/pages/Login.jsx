@@ -1,30 +1,29 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { saveUser } from '../services/storageService';
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [name, setName] = useState('');
+  const [name, setUserName] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
-  
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-     if (name.trim() !== '') {
-      saveUser(name);
-      navigate('/home');
+    if (name.trim()) {
+      login(name.trim().toLowerCase());
+      navigate("/home"); // Redireciona após login
     }
   };
 
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-gray-900">
-      <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-80">
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-80">
         <h2 className="text-2xl font-bold mb-4 text-center text-gray-900">Bem-vindo!</h2>
         <input
           type="text"
           placeholder="Digite seu nome"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setUserName(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded mb-4 text-gray-600"
           required
         />

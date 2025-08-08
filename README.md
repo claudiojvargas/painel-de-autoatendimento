@@ -42,6 +42,8 @@ npm run dev
 Abra no navegador:
 http://localhost:5173
 
+```
+
 📁 Estrutura do Projeto
 bash
 Copiar

@@ -1,12 +1,92 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Painel de Autoatendimento (Dashboard Pessoal)
 
-Currently, two official plugins are available:
+Painel web para gerenciamento pessoal de tarefas, hábitos e prioridades, desenvolvido em React com TailwindCSS. Dados são inicialmente persistidos via localStorage, com planos de evolução para backend em Symfony e alertas via Node.js.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Funcionalidades
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Criar, editar e remover tarefas
+- Organização por categorias e prioridades
+- Persistência local usando localStorage
+- Interface responsiva com TailwindCSS
+- Autenticação simples (em desenvolvimento)
+- Futuras integrações:
+  - Backend Symfony para armazenamento em banco de dados
+  - Sistema de alertas em tempo real via Node.js
+
+---
+
+## Tecnologias Utilizadas
+
+- React
+- TailwindCSS
+- localStorage (para persistência inicial)
+- UUID para geração de IDs únicos
+- Symfony (planejado para backend)
+- Node.js (planejado para alertas)
+
+---
+
+## Como Rodar o Projeto Localmente
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+```
+
+2. Instale as dependências:
+
+```bash
+npm install
+```
+
+3. Inicie o servidor de desenvolvimento:
+
+```bash
+npm run dev
+```
+
+4. Abra no navegador:
+
+```
+http://localhost:5173
+```
+
+---
+
+## Estrutura do Projeto
+
+```
+/src
+  /components    # Componentes React reutilizáveis
+  /context       # Contextos para gerenciamento de estado global (ex: AuthContext)
+  /services      # Serviços para manipulação de dados (ex: storageService)
+  /pages         # Páginas principais
+  App.jsx        # Componente raiz
+  main.jsx       # Entrada da aplicação
+```
+
+---
+
+## Próximos Passos
+
+- Implementar autenticação completa
+- Integrar backend Symfony para persistência em banco de dados
+- Criar sistema de notificações e alertas via Node.js
+- Melhorar UI/UX e responsividade
+
+---
+
+## Contribuição
+
+Contribuições são bem-vindas! Abra issues e pull requests para sugerir melhorias ou corrigir bugs.
+
+---
+
+## Licença
+
+Este projeto está licenciado sob a MIT License.

@@ -44,8 +44,8 @@ http://localhost:5173
 
 ```
 
-📁 Estrutura do Projeto
-bash
+## 📁 Estrutura do Projeto
+```bash
 Copiar
 Editar
 /src
@@ -55,18 +55,20 @@ Editar
   /pages         # Páginas principais
   App.jsx        # Componente raiz
   main.jsx       # Entrada da aplicação
-🚧 Próximos Passos
-Implementar autenticação completa
+```
 
-Integrar backend Symfony para persistência em banco de dados
+## 🚧 Próximos Passos
+- Implementar autenticação completa
 
-Criar sistema de notificações e alertas via Node.js
+- Integrar backend Symfony para persistência em banco de dados
 
-Melhorar UI/UX e responsividade
+- Criar sistema de notificações e alertas via Node.js
 
-🤝 Contribuição
+- Melhorar UI/UX e responsividade
+
+## 🤝 Contribuição
 Contribuições são sempre bem-vindas!
 Abra issues e pull requests para sugerir melhorias ou corrigir bugs.
 
-📄 Licença
+## 📄 Licença
 Este projeto está licenciado sob a MIT License.

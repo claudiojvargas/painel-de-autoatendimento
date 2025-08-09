@@ -7,7 +7,9 @@ import { format } from 'date-fns';
 
 const HabitList = ({ habits, setHabits }) => {
   const [form, setForm] = useState({ name: '', frequency: 'diário' });
-  const [filter, setFilter] = useState("todos");
+  const [filter, setFilter] = useState("pending"); // Filtro inicial
+  const today = format(new Date(), 'yyyy-MM-dd');
+
   const { user } = useAuth();
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const HabitList = ({ habits, setHabits }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!user) return;
 
     const newHabit = {
       id: uuidv4(),
@@ -39,7 +42,7 @@ const HabitList = ({ habits, setHabits }) => {
   };
 
   const toggleToday = (id) => {
-    const today = format(new Date(), 'yyyy-MM-dd');
+    if (!user) return;
 
     const updated = habits.map((habit) => {
       if (habit.id === id) {
@@ -57,16 +60,18 @@ const HabitList = ({ habits, setHabits }) => {
   };
 
   const handleDelete = (id) => {
+    if (!user) return;
+
     const updated = habits.filter((h) => h.id !== id);
     setHabits(updated);
     saveHabits(user, updated);
   };
 
-  // Filtrando hábitos
+  // Filtragem na renderização
   const filteredHabits = habits.filter((habit) => {
     if (filter === "all") return true;
-    if (filter === "pending") return !habit.history.includes(format(new Date(), 'yyyy-MM-dd'));
-    if (filter === "completed") return habit.history.includes(format(new Date(), 'yyyy-MM-dd'));
+    if (filter === "pending") return !habit.history.includes(today);
+    if (filter === "completed") return habit.history.includes(today);
     if (filter === "daily") return habit.frequency === "diário";
     if (filter === "weekly") return habit.frequency === "semanal";
     return true;
@@ -76,17 +81,15 @@ const HabitList = ({ habits, setHabits }) => {
     <div className="space-y-6">
       {/* Filtros + Contadores */}
       <div className="flex flex-col items-center gap-4">
-        {/* Contadores */}
         <div className="flex gap-4">
           <div className="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-medium">
-            Concluídas: {habits.filter(h => h.history.includes(format(new Date(), 'yyyy-MM-dd'))).length}
+            Concluídas: {habits.filter(h => h.history.includes(today)).length}
           </div>
           <div className="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-lg font-medium">
-            Pendentes: {habits.filter(h => !h.history.includes(format(new Date(), 'yyyy-MM-dd'))).length}
+            Pendentes: {habits.filter(h => !h.history.includes(today)).length}
           </div>
         </div>
 
-        {/* Filtros */}
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             className={`px-3 py-1 rounded ${filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
@@ -121,7 +124,7 @@ const HabitList = ({ habits, setHabits }) => {
         </div>
       </div>
 
-      {/* Formulário de novo hábito */}
+      {/* Formulário */}
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 shadow-md rounded-xl space-y-4"
@@ -158,7 +161,7 @@ const HabitList = ({ habits, setHabits }) => {
         </button>
       </form>
 
-      {/* Lista de hábitos */}
+      {/* Lista */}
       <div className="space-y-3">
         {filteredHabits.length === 0 && (
           <p className="text-center text-gray-500">

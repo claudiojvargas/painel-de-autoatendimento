@@ -12,7 +12,7 @@ const TaskList = ({ tasks, setTasks }) => {
     dueDate: "",
   });
   const [editingTask, setEditingTask] = useState(null);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("pending");
 
   const { user } = useAuth();
 
@@ -52,11 +52,20 @@ const TaskList = ({ tasks, setTasks }) => {
   };
 
   const handleToggle = (id) => {
-    const updated = tasks.map((task) =>
+    const updatedTasks = tasks.map((task) =>
       task.id === id ? { ...task, completed: !task.completed } : task
     );
-    setTasks(updated);
-    saveTasks(user, updated);
+
+    saveTasks(user, updatedTasks);
+
+    // Atualiza lista de acordo com o filtro
+    if (filter === "pending") {
+      setTasks(updatedTasks.filter((t) => !t.completed));
+    } else if (filter === "completed") {
+      setTasks(updatedTasks.filter((t) => t.completed));
+    } else {
+      setTasks(updatedTasks);
+    }
   };
 
   const handleDelete = (id) => {

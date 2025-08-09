@@ -12,6 +12,7 @@ const TaskList = ({ tasks, setTasks }) => {
     dueDate: "",
   });
   const [editingTask, setEditingTask] = useState(null);
+  const [filter, setFilter] = useState("all");
 
   const { user } = useAuth();
 
@@ -74,8 +75,71 @@ const TaskList = ({ tasks, setTasks }) => {
     setEditingTask(task);
   };
 
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "all") return true;
+    if (filter === "pending") return !task.completed;
+    if (filter === "completed") return task.completed;
+    if (filter === "high") return task.priority === "Alta";
+    if (filter === "medium") return task.priority === "Média";
+    if (filter === "low") return task.priority === "Baixa";
+    return true;
+  });
+
   return (
     <div className="space-y-6">
+      {/* Filtros + Contadores */}
+      <div className="flex flex-col items-center gap-4">
+        {/* Contadores */}
+        <div className="flex gap-4">
+          <div className="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-medium">
+            Concluídas: {tasks.filter(t => t.completed).length}
+          </div>
+          <div className="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-lg font-medium">
+            Pendentes: {tasks.filter(t => !t.completed).length}
+          </div>
+        </div>
+
+        {/* Filtros */}
+        <div className="flex flex-wrap gap-2 justify-center">
+          <button
+            className={`px-3 py-1 rounded ${filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setFilter("all")}
+          >
+            Todos
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${filter === "pending" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setFilter("pending")}
+          >
+            Pendentes
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${filter === "completed" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setFilter("completed")}
+          >
+            Concluídas
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${filter === "high" ? "bg-red-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setFilter("high")}
+          >
+            Alta
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${filter === "medium" ? "bg-yellow-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setFilter("medium")}
+          >
+            Média
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${filter === "low" ? "bg-green-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setFilter("low")}
+          >
+            Baixa
+          </button>
+        </div>
+      </div>
+
       {/* Formulário */}
       <form
         onSubmit={handleSubmit}
@@ -133,12 +197,12 @@ const TaskList = ({ tasks, setTasks }) => {
 
       {/* Lista de Tarefas */}
       <div className="space-y-3">
-        {tasks.length === 0 && (
+        {filteredTasks.length === 0 && (
           <p className="text-center text-gray-500">
-            Nenhuma tarefa ainda.
+            Nenhuma tarefa encontrada.
           </p>
         )}
-        {tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <TaskCard
             key={task.id}
             task={task}

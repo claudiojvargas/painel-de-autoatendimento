@@ -4,6 +4,9 @@ import { useAuth } from "../context/AuthContext";
 import { getTasks, saveTasks } from '../services/storageService';
 import { v4 as uuidv4 } from 'uuid';
 
+// Importando ícones do Lucide
+import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
+
 const TaskList = ({ tasks, setTasks }) => {
   const [form, setForm] = useState({
     title: "",
@@ -98,7 +101,6 @@ const TaskList = ({ tasks, setTasks }) => {
     return true;
   });
 
-  // Gera lista visível com wrap-around
   const getVisibleTasks = () => {
     if (filteredTasks.length <= MAX_VISIBLE) {
       return filteredTasks;
@@ -112,7 +114,6 @@ const TaskList = ({ tasks, setTasks }) => {
 
   const visibleTasks = getVisibleTasks();
 
-  // Carrossel automático
   useEffect(() => {
     if (filteredTasks.length <= MAX_VISIBLE) return;
     const interval = setInterval(() => {
@@ -185,24 +186,25 @@ const TaskList = ({ tasks, setTasks }) => {
             ))}
           </div>
 
-          {/* Botão adicionar */}
+          {/* Botão adicionar com ícone */}
           <button
             onClick={() => setShowPopup(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded shadow text-lg font-medium mt-4"
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg shadow text-lg font-medium mt-4 flex items-center justify-center gap-2"
           >
-            Nova Tarefa +
+            <Plus size={20} />
+            Adicionar Tarefa
           </button>
         </div>
 
         {/* Coluna direita: carrossel com setas */}
         <div className="col-span-8 flex items-center space-x-2 ml-8">
-          {/* Seta esquerda */}
+          {/* Seta esquerda com ícone */}
           <button
             onClick={() => scrollCarousel('left')}
-            className="text-3xl text-gray-400 hover:text-gray-700 mr-8"
+            className="text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-200"
             aria-label="Scroll Left"
           >
-            &#8249;
+            <ChevronLeft size={32} />
           </button>
 
           {/* Container do carrossel */}
@@ -224,13 +226,13 @@ const TaskList = ({ tasks, setTasks }) => {
             ))}
           </div>
 
-          {/* Seta direita */}
+          {/* Seta direita com ícone */}
           <button
             onClick={() => scrollCarousel('right')}
-            className="text-3xl text-gray-400 hover:text-gray-700"
+            className="text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-200"
             aria-label="Scroll Right"
           >
-            &#8250;
+            <ChevronRight size={32} />
           </button>
         </div>
       </div>
@@ -242,9 +244,19 @@ const TaskList = ({ tasks, setTasks }) => {
             onSubmit={handleSubmit}
             className="bg-white rounded-lg p-8 w-96 shadow-lg space-y-6"
           >
-            <h2 className="text-lg font-semibold text-gray-900">
-              {editingTask ? "Editar Tarefa" : "Nova Tarefa"}
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">
+                {editingTask ? "Editar Tarefa" : "Nova Tarefa"}
+              </h2>
+              <button
+                type="button"
+                onClick={() => { setShowPopup(false); setEditingTask(null); }}
+                className="text-gray-500 hover:text-gray-900"
+                aria-label="Fechar popup"
+              >
+                <X size={24} />
+              </button>
+            </div>
 
             <input
               type="text"
@@ -286,8 +298,9 @@ const TaskList = ({ tasks, setTasks }) => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
+              className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition flex items-center justify-center gap-2"
             >
+              <Plus size={20} />
               {editingTask ? "Salvar Alterações" : "Adicionar Tarefa"}
             </button>
 

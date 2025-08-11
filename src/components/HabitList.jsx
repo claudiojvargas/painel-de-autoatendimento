@@ -5,6 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 import HabitCard from './HabitCard';
 import { format } from 'date-fns';
 
+// Importando ícones do Lucide
+import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
+
 const HabitList = ({ habits, setHabits }) => {
   const [form, setForm] = useState({ name: '', frequency: 'diário' });
   const [filter, setFilter] = useState("pending"); // Filtro inicial
@@ -12,7 +15,6 @@ const HabitList = ({ habits, setHabits }) => {
   const today = format(new Date(), 'yyyy-MM-dd');
   const { user } = useAuth();
 
-  // Índice do primeiro hábito visível no carrossel
   const [startIndex, setStartIndex] = useState(0);
   const MAX_VISIBLE = 5;
 
@@ -72,7 +74,6 @@ const HabitList = ({ habits, setHabits }) => {
     saveHabits(user, updated);
   };
 
-  // Filtragem na renderização
   const filteredHabits = habits.filter((habit) => {
     if (filter === "all") return true;
     if (filter === "pending") return !habit.history.includes(today);
@@ -82,7 +83,6 @@ const HabitList = ({ habits, setHabits }) => {
     return true;
   });
 
-  // Função para retornar 5 hábitos visíveis com wrap-around
   const getVisibleHabits = () => {
     if (filteredHabits.length <= MAX_VISIBLE) {
       return filteredHabits;
@@ -96,9 +96,8 @@ const HabitList = ({ habits, setHabits }) => {
 
   const visibleHabits = getVisibleHabits();
 
-  // Avança o carrossel a cada 3 segundos
   useEffect(() => {
-    if (filteredHabits.length <= MAX_VISIBLE) return; // não precisa rodar
+    if (filteredHabits.length <= MAX_VISIBLE) return;
 
     const interval = setInterval(() => {
       setStartIndex((prev) => (prev + 1) % filteredHabits.length);
@@ -107,7 +106,6 @@ const HabitList = ({ habits, setHabits }) => {
     return () => clearInterval(interval);
   }, [filteredHabits]);
 
-  // Controle manual com setas
   const scrollCarousel = (direction) => {
     if (filteredHabits.length <= MAX_VISIBLE) return;
 
@@ -183,28 +181,29 @@ const HabitList = ({ habits, setHabits }) => {
             </button>
           </div>
 
-          {/* Botão adicionar */}
+          {/* Botão adicionar com ícone */}
           <button
             onClick={() => setShowPopup(true)}
-            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded shadow text-lg font-medium mt-4"
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg shadow text-lg font-medium mt-4 flex items-center justify-center gap-2"
           >
-            Adicionar Hábito +
+            <Plus size={20} />
+            Adicionar Hábito
           </button>
         </div>
 
-        {/* Lado direito: carrossel com setas */}
+        {/* Coluna direito: carrossel com setas */}
         <div className="col-span-8 flex items-center space-x-2 ml-8">
-          {/* Seta esquerda */}
+          {/* Seta esquerda com ícone */}
           <button
             onClick={() => scrollCarousel('left')}
-            className="text-3xl text-gray-400 hover:text-gray-700 mr-8"
+            className="text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-200"
             aria-label="Scroll Left"
           >
-            &#8249;
+            <ChevronLeft size={32} />
           </button>
 
           {/* Container do carrossel sem scroll nativo */}
-          <div className="flex gap-4 py-2">
+          <div className="flex gap-4 py-2 overflow-hidden">
             {visibleHabits.length === 0 && (
               <p className="text-center text-gray-500 self-center">
                 Nenhum hábito encontrado.
@@ -221,13 +220,13 @@ const HabitList = ({ habits, setHabits }) => {
             ))}
           </div>
 
-          {/* Seta direita */}
+          {/* Seta direita com ícone */}
           <button
             onClick={() => scrollCarousel('right')}
-            className="text-3xl text-gray-400 hover:text-gray-700"
+            className="text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-200"
             aria-label="Scroll Right"
           >
-            &#8250;
+            <ChevronRight size={32} />
           </button>
         </div>
       </div>
@@ -239,7 +238,18 @@ const HabitList = ({ habits, setHabits }) => {
             onSubmit={handleSubmit}
             className="bg-white rounded-lg p-8 w-96 shadow-lg space-y-6"
           >
-            <h2 className="text-lg font-semibold text-gray-900">Novo Hábito</h2>
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              Novo Hábito
+              {/* Ícone X para fechar */}
+              <button
+                type="button"
+                onClick={() => setShowPopup(false)}
+                className="ml-auto text-gray-500 hover:text-gray-900"
+                aria-label="Fechar popup"
+              >
+                <X size={24} />
+              </button>
+            </h2>
             <input
               type="text"
               name="name"
@@ -262,8 +272,9 @@ const HabitList = ({ habits, setHabits }) => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
+              className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition flex items-center justify-center gap-2"
             >
+              <Plus size={20} />
               Adicionar Hábito
             </button>
 

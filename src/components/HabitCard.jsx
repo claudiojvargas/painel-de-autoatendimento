@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { CheckSquare, Trash2 } from 'lucide-react';
 
 const HabitCard = ({ habit, onToggleToday, onDelete }) => {
   const today = format(new Date(), 'yyyy-MM-dd');
@@ -18,26 +19,32 @@ const HabitCard = ({ habit, onToggleToday, onDelete }) => {
               : 'bg-red-100 text-red-700'
           }`}
         >
-          {doneToday ? 'Feito hoje ✅' : 'Não feito hoje ❌'}
+          {doneToday ? 'Feito hoje' : 'Não feito hoje'}
         </span>
       </div>
 
-      <div className="flex justify-between mt-4">
+      <div className="flex flex-col mt-4 gap-2">
         <button
           onClick={() => onToggleToday(habit.id)}
-          className={`px-3 py-1 text-sm font-medium rounded-md transition ${
+          className={`flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-md transition ${
             doneToday
               ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
               : 'bg-green-100 text-green-700 hover:bg-green-200'
           }`}
+          aria-label={doneToday ? "Desmarcar hábito" : "Marcar hábito"}
+          title={doneToday ? "Desmarcar hábito" : "Marcar hábito"}
         >
+          <CheckSquare size={18} />
           {doneToday ? 'Desmarcar' : 'Marcar'}
         </button>
 
         <button
           onClick={() => onDelete(habit.id)}
-          className="px-3 py-1 text-sm font-medium rounded-md bg-red-100 text-red-700 hover:bg-red-200 transition"
+          className="flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-md bg-red-100 text-red-700 hover:bg-red-200 transition"
+          aria-label="Excluir hábito"
+          title="Excluir hábito"
         >
+          <Trash2 size={18} />
           Excluir
         </button>
       </div>

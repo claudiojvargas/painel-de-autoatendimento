@@ -1,3 +1,5 @@
+import { CheckCircle, Edit2, Trash2 } from 'lucide-react';
+
 const TaskCard = ({ task, onToggle, onDelete, onEdit }) => {
   const isOverdue =
     task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
@@ -25,29 +27,41 @@ const TaskCard = ({ task, onToggle, onDelete, onEdit }) => {
         )}
       </div>
 
-      <div className="flex justify-between mt-4">
+      <div className="grid grid-cols-2 gap-2">
         <button
           onClick={() => onToggle(task.id)}
-          className={`px-3 py-1 text-sm font-medium rounded-md transition ${
+          className={`flex items-center col-span-2 gap-1 px-3 py-1 text-sm font-medium rounded-md transition ${
             task.completed
               ? "bg-gray-300 text-gray-700 hover:bg-gray-400"
               : "bg-green-100 text-green-700 hover:bg-green-200"
           }`}
+          aria-label={task.completed ? "Desfazer tarefa" : "Concluir tarefa"}
+          title={task.completed ? "Desfazer tarefa" : "Concluir tarefa"}
         >
+          <CheckCircle size={18} 
+            className={task.completed ? "text-gray-700" : "text-green-700"} 
+          />
+          {/* Mantém o texto se quiser, senão pode remover */}
           {task.completed ? "Desfazer" : "Concluir"}
         </button>
 
         <button
           onClick={() => onEdit(task)}
-          className="px-3 py-1 text-sm font-medium rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition"
+          className="flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition"
+          aria-label="Editar tarefa"
+          title="Editar tarefa"
         >
+          <Edit2 size={18} />
           Editar
         </button>
 
         <button
           onClick={() => onDelete(task.id)}
-          className="px-3 py-1 text-sm font-medium rounded-md bg-red-100 text-red-700 hover:bg-red-200 transition"
+          className="flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-md bg-red-100 text-red-700 hover:bg-red-200 transition"
+          aria-label="Excluir tarefa"
+          title="Excluir tarefa"
         >
+          <Trash2 size={18} />
           Excluir
         </button>
       </div>

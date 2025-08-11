@@ -118,7 +118,7 @@ const TaskList = ({ tasks, setTasks }) => {
     if (filteredTasks.length <= MAX_VISIBLE) return;
     const interval = setInterval(() => {
       setStartIndex((prev) => (prev + 1) % filteredTasks.length);
-    }, 3000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [filteredTasks]);
 

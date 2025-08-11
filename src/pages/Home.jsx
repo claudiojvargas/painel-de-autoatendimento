@@ -13,14 +13,14 @@ const Home = ({ tasks, setTasks, habits, setHabits }) => {
 
       <Dashboard tasks={tasks} habits={habits} />
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Tarefas</h2>
-          <TaskList tasks={tasks} setTasks={setTasks} />
-        </div>
+      <div className="grid md:grid-cols-1 gap-8">
         <div>
           <h2 className="text-xl font-semibold mb-2">Hábitos</h2>
           <HabitList habits={habits} setHabits={setHabits} />
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold mb-2">Tarefas</h2>
+          <TaskList tasks={tasks} setTasks={setTasks} />
         </div>
       </div>
     </div>

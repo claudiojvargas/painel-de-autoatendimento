@@ -3,8 +3,6 @@ import TaskCard from './TaskCard';
 import { useAuth } from "../context/AuthContext";
 import { getTasks, saveTasks } from '../services/storageService';
 import { v4 as uuidv4 } from 'uuid';
-
-// Importando ícones do Lucide
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
 
 const TaskList = ({ tasks, setTasks }) => {
@@ -26,7 +24,7 @@ const TaskList = ({ tasks, setTasks }) => {
     if (user) {
       setTasks(getTasks(user));
     }
-  }, [user]);
+  }, [user, setTasks]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -58,20 +56,14 @@ const TaskList = ({ tasks, setTasks }) => {
     setShowPopup(false);
   };
 
+  // 🔹 Agora mantém sempre a lista completa no estado
   const handleToggle = (id) => {
     const updatedTasks = tasks.map((task) =>
       task.id === id ? { ...task, completed: !task.completed } : task
     );
 
     saveTasks(user, updatedTasks);
-
-    if (filter === "pending") {
-      setTasks(updatedTasks.filter((t) => !t.completed));
-    } else if (filter === "completed") {
-      setTasks(updatedTasks.filter((t) => t.completed));
-    } else {
-      setTasks(updatedTasks);
-    }
+    setTasks(updatedTasks);
   };
 
   const handleDelete = (id) => {
@@ -91,6 +83,7 @@ const TaskList = ({ tasks, setTasks }) => {
     setShowPopup(true);
   };
 
+  // 🔹 Filtro aplicado apenas na hora de exibir
   const filteredTasks = tasks.filter((task) => {
     if (filter === "all") return true;
     if (filter === "pending") return !task.completed;
@@ -133,10 +126,11 @@ const TaskList = ({ tasks, setTasks }) => {
 
   return (
     <>
-      <div className="grid grid-cols-10 gap-6 bg-gray-50 p-6">
-        {/* Coluna esquerda: contadores, filtros, botão */}
+      <div className="grid grid-cols-10 gap-6 bg-gray-50 p-6 pt-4 rounded-2xl shadow-md">
+        {/* Coluna esquerda */}
         <div className="flex flex-col col-span-2 items-center space-y-5">
-          {/* Contadores */}
+          <h2 className="text-2xl font-semibold mb-6">Tarefas</h2>
+
           <div className="flex space-x-3">
             <div className="bg-green-100 text-green-700 px-3 py-1 rounded font-medium text-sm">
               Concluídas: {tasks.filter(t => t.completed).length}
@@ -186,7 +180,7 @@ const TaskList = ({ tasks, setTasks }) => {
             ))}
           </div>
 
-          {/* Botão adicionar com ícone */}
+          {/* Botão adicionar */}
           <button
             onClick={() => setShowPopup(true)}
             className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg shadow text-lg font-medium mt-4 flex items-center justify-center gap-2"
@@ -196,18 +190,15 @@ const TaskList = ({ tasks, setTasks }) => {
           </button>
         </div>
 
-        {/* Coluna direita: carrossel com setas */}
+        {/* Coluna direita */}
         <div className="col-span-8 flex items-center space-x-2 ml-8">
-          {/* Seta esquerda com ícone */}
           <button
             onClick={() => scrollCarousel('left')}
             className="text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-200"
-            aria-label="Scroll Left"
           >
             <ChevronLeft size={32} />
           </button>
 
-          {/* Container do carrossel */}
           <div className="flex gap-4 py-2 overflow-hidden">
             {visibleTasks.length === 0 && (
               <p className="text-center text-gray-500 self-center">
@@ -226,20 +217,18 @@ const TaskList = ({ tasks, setTasks }) => {
             ))}
           </div>
 
-          {/* Seta direita com ícone */}
           <button
             onClick={() => scrollCarousel('right')}
             className="text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-200"
-            aria-label="Scroll Right"
           >
             <ChevronRight size={32} />
           </button>
         </div>
       </div>
 
-      {/* Popup adicionar/editar tarefa */}
+      {/* Popup */}
       {showPopup && (
-        <div className="fixed inset-0  bg-gray-900/90 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-gray-900/90 flex justify-center items-center z-50">
           <form
             onSubmit={handleSubmit}
             className="bg-white rounded-lg p-8 w-96 shadow-lg space-y-6"
@@ -252,7 +241,6 @@ const TaskList = ({ tasks, setTasks }) => {
                 type="button"
                 onClick={() => { setShowPopup(false); setEditingTask(null); }}
                 className="text-gray-500 hover:text-gray-900"
-                aria-label="Fechar popup"
               >
                 <X size={24} />
               </button>

@@ -120,9 +120,10 @@ const HabitList = ({ habits, setHabits }) => {
 
   return (
     <>
-      <div className="grid grid-cols-10 gap-6 bg-gray-50 p-6">
+      <div className="grid grid-cols-10 gap-6 bg-gray-50 p-6 pt-4 rounded-2xl shadow-md">
         {/* Lado esquerdo: contadores, filtros, botão */}
         <div className="flex flex-col col-span-2 items-center space-y-5">
+          <h2 className="text-2xl font-semibold mb-6">Hábitos</h2>
           {/* Contadores */}
           <div className="flex space-x-3">
             <div className="bg-green-100 text-green-700 px-3 py-1 rounded font-medium text-sm">
